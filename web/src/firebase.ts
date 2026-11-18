@@ -1,16 +1,20 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app'
 import { getAuth, GoogleAuthProvider, type Auth } from 'firebase/auth'
 
+// Firebase web yapılandırması gizli değildir (tarayıcıya zaten gönderilir).
+// Güvenlik Firebase Security Rules ve Authorized domains ile sağlanır.
+// İstenirse .env içindeki VITE_FIREBASE_* değişkenleriyle ezilebilir.
+const env = import.meta.env
 const config = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: env.VITE_FIREBASE_API_KEY || 'AIzaSyCLj72wuEDf8tqw2UM3z3RiVcCGogqI3KU',
+  authDomain: env.VITE_FIREBASE_AUTH_DOMAIN || 'eto-forum.firebaseapp.com',
+  projectId: env.VITE_FIREBASE_PROJECT_ID || 'eto-forum',
+  storageBucket: env.VITE_FIREBASE_STORAGE_BUCKET || 'eto-forum.firebasestorage.app',
+  messagingSenderId: env.VITE_FIREBASE_MESSAGING_SENDER_ID || '1071181835123',
+  appId: env.VITE_FIREBASE_APP_ID || '1:1071181835123:web:686186b501bed0fcf47306',
 }
 
-/** Firebase anahtarları .env dosyasında tanımlı mı? */
+/** Firebase yapılandırması mevcut mu? */
 export const firebaseConfigured = Boolean(config.apiKey && config.authDomain && config.projectId)
 
 let app: FirebaseApp | null = null

@@ -20,17 +20,15 @@ React + TypeScript + Vite + Firebase Authentication.
 ```bash
 cd web
 npm install
-cp .env.example .env   # Firebase web uygulaması anahtarlarını girin
 npm run dev
 ```
 
-Firebase anahtarları girilmezse giriş ekranında **"Demo olarak devam et"** butonu çıkar. Bu buton, Google girişi olmadan arayüzü denemek içindir.
+`eto-forum` Firebase projesinin web yapılandırması `web/src/firebase.ts` içinde tanımlı. Farklı bir proje kullanmak için `web/.env` dosyasında `VITE_FIREBASE_*` değişkenlerini verin (bkz. `.env.example`).
 
 ### Firebase kurulumu
-1. Firebase Console'da bir proje oluşturun ve bir **Web app** ekleyin.
+1. Proje: `eto-forum` (Web app eklendi).
 2. **Authentication > Sign-in method** altında **Google** sağlayıcısını açın.
 3. **Authentication > Settings > Authorized domains** listesine prototipi yayınlayacağınız alan adını ekleyin.
-4. Web app ayarlarındaki değerleri `web/.env` dosyasına yazın.
 
 ### Proje yapısı
 ```
