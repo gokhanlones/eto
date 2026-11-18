@@ -163,6 +163,7 @@ button { font: inherit; cursor: pointer; }
   padding: calc(var(--bar-h) + 16px) 16px calc(var(--bar-h) + 24px);
 }
 .page { max-width: 720px; margin: 0 auto; }
+.page h2 { font-size: 16px; } /* sayfa başlıkları: 12 pt */
 
 /* ---------- Arka plan karartma ---------- */
 .backdrop {
