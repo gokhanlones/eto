@@ -1,0 +1,260 @@
+:root {
+  --navy: #0b2545;
+  --navy-2: #13315c;
+  --accent: #f4b400;
+  --bg: #f3f5f9;
+  --surface: #ffffff;
+  --text: #14213d;
+  --muted: #5c6b80;
+  --border: #dde3ec;
+  --bar-h: 64px;
+  --radius: 14px;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a1220;
+    --surface: #121d30;
+    --text: #e8edf5;
+    --muted: #93a1b5;
+    --border: #22314a;
+  }
+}
+
+* { box-sizing: border-box; }
+html, body, #root { margin: 0; height: 100%; }
+body { background: var(--bg); }
+h1, h2, h3 { margin: 0 0 8px; }
+button { font: inherit; cursor: pointer; }
+
+.muted { color: var(--muted); }
+.small { font-size: 0.85rem; }
+
+/* ---------- Splash ---------- */
+.splash {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: var(--navy);
+}
+.splash-logo {
+  color: var(--accent);
+  font-size: clamp(4rem, 22vw, 8rem);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  margin: 0;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+/* ---------- Ortalanmış ekranlar (offline / login) ---------- */
+.center-screen {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px 16px;
+  gap: 12px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+.logo-small, .logo-large {
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  background: var(--navy);
+  border-radius: 18px;
+}
+.logo-small { font-size: 1.2rem; padding: 8px 14px; }
+.logo-large { font-size: 2.6rem; padding: 18px 28px; margin-bottom: 12px; }
+.offline-icon { font-size: 3rem; }
+
+.btn {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 22px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 320px;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn.primary { background: var(--navy); color: #fff; }
+.btn.google { background: #fff; color: #1f1f1f; border: 1px solid #dadce0; margin-top: 8px; }
+.btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+.error { color: #c0392b; }
+.note {
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+/* ---------- Uygulama iskeleti ---------- */
+.app { height: 100%; display: flex; flex-direction: column; }
+
+.topbar, .bottombar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: var(--bar-h);
+  display: grid;
+  grid-template-columns: 56px 1fr 56px;
+  align-items: center;
+  padding: 0 8px;
+  background: var(--navy);
+  color: #fff;
+  z-index: 10;
+}
+.topbar { top: 0; padding-top: env(safe-area-inset-top); }
+.bottombar {
+  bottom: 0;
+  height: calc(var(--bar-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  justify-items: center;
+}
+.topbar-title {
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+}
+.icon-btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: inherit;
+  display: grid;
+  place-items: center;
+}
+.icon-btn:hover, .icon-btn.active { background: rgba(255, 255, 255, 0.12); }
+.icon-btn-spacer { width: 48px; }
+.home-btn {
+  width: 60px;
+  height: 60px;
+  margin-top: -22px;
+  border-radius: 50%;
+  border: 4px solid var(--bg);
+  background: var(--accent);
+  color: var(--navy);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.content {
+  flex: 1;
+  padding: calc(var(--bar-h) + 16px) 16px calc(var(--bar-h) + 24px);
+}
+.page { max-width: 720px; margin: 0 auto; }
+
+/* ---------- Arka plan karartma ---------- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s;
+  z-index: 20;
+}
+.backdrop.show { opacity: 1; pointer-events: auto; }
+
+/* ---------- Sol menü ---------- */
+.drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: min(300px, 82vw);
+  background: var(--surface);
+  z-index: 30;
+  transform: translateX(-100%);
+  transition: transform 0.28s ease;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  gap: 16px;
+}
+.drawer.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3); }
+.drawer-user { display: flex; align-items: center; gap: 12px; }
+.drawer-name { font-weight: 700; }
+.avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; }
+.avatar.placeholder {
+  display: grid;
+  place-items: center;
+  background: var(--navy);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+.drawer-list { list-style: none; margin: 0; padding: 0; flex: 1; }
+.drawer-list button {
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  padding: 14px 8px;
+  border-radius: 10px;
+}
+.drawer-list button:hover { background: var(--bg); }
+.drawer-meta { padding: 14px 8px; }
+.signout { max-width: none; }
+
+/* ---------- Alttan yükselen panel ---------- */
+.sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 720px;
+  margin: 0 auto;
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;
+  z-index: 30;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  padding: 8px 16px calc(24px + env(safe-area-inset-bottom));
+}
+.sheet.open { transform: translateY(0); box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.3); }
+.sheet-handle {
+  width: 44px;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--border);
+  margin: 4px auto 12px;
+}
+.sheet-title { font-size: 1rem; color: var(--muted); margin: 0 4px 8px; }
+.sheet-list { list-style: none; margin: 0; padding: 0; }
+.sheet-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 12px;
+  border-radius: 12px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+.sheet-item:hover { background: var(--bg); }
+.sheet-item.active { background: var(--bg); color: var(--navy-2); }
+.sheet-icon { font-size: 1.4rem; width: 32px; text-align: center; }
