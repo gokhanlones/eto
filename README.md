@@ -31,6 +31,12 @@ npm run dev
 2. **Authentication > Sign-in method** altında **Google** sağlayıcısını açın.
 3. **Authentication > Settings > Authorized domains** listesine prototipi yayınlayacağınız alan adını ekleyin.
 
+### Konular (Firestore + Storage)
+Alt başlık sayfasındaki **+** butonu konu açma kartını açar. Kartta başlık, açıklama, fotoğraf/dosya ekleme ve gönder/iptal bulunur. Açıklama boşken gönder butonu pasif kalır.
+
+- Konular Firestore'da `topics` koleksiyonuna, ekler Storage'da `topics/{konuId}/` altına kaydedilir.
+- Güvenlik kuralları repo kökündedir: `firestore.rules` ve `storage.rules`. Firebase Console'da **Firestore > Rules** ve **Storage > Rules** sekmelerine yapıştırılır.
+
 ### Proje yapısı
 ```
 web/src/
@@ -40,6 +46,8 @@ web/src/
   firebase.ts        Firebase başlatma
   auth.tsx           Google girişi (AuthContext)
   sections.ts        ana başlıklar ve alt başlıklar
+  topics.ts          konu okuma/yazma (Firestore, Storage)
   components/Layout.tsx   banner, bottom bar, hamburger menü, alt panel
+  components/NewTopicCard.tsx   konu açma kartı
   screens/           Splash, Offline, Login, Home, SubSection
 ```

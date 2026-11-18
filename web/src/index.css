@@ -267,3 +267,126 @@ button { font: inherit; cursor: pointer; }
 .page-path { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 10px; }
 .page-path-parent { color: var(--muted); font-weight: 600; }
 .page-path-sep { color: var(--muted); font-weight: 400; }
+
+/* ---------- Konu listesi ---------- */
+.topic-list { list-style: none; margin: 16px 0 0; padding: 0; display: grid; gap: 12px; }
+.topic {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+.topic-title { font-weight: 700; margin-bottom: 4px; }
+.topic-desc { margin: 0 0 8px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.topic-attachments { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.topic-photo { width: 88px; height: 88px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); display: block; }
+.topic-file {
+  color: var(--text);
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Sağ alttaki + butonu ---------- */
+.fab {
+  position: fixed;
+  right: 16px;
+  bottom: calc(var(--bar-h) + env(safe-area-inset-bottom) + 16px);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: var(--navy);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  z-index: 15;
+}
+@media (min-width: 752px) {
+  .fab { right: calc((100vw - 720px) / 2); }
+}
+
+/* ---------- Konu açma kartı ---------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.card {
+  width: 100%;
+  max-width: 520px;
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+.field {
+  width: 100%;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+}
+.field:focus { outline: 2px solid var(--navy-2); outline-offset: -1px; }
+.field-title { font-weight: 700; }
+.field-desc { resize: vertical; min-height: 120px; }
+.upload-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-plain {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+}
+.btn-plain:disabled { opacity: 0.5; }
+.attach-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.attach-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+.attach-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.attach-remove { border: none; background: transparent; color: var(--muted); font-size: 0.85rem; padding: 4px; }
+.card-actions { display: flex; justify-content: flex-end; gap: 12px; }
+.round-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  display: grid;
+  place-items: center;
+}
+.round-btn.send { background: var(--navy); border-color: var(--navy); color: #fff; }
+.round-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }

@@ -1,5 +1,7 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app'
 import { getAuth, GoogleAuthProvider, type Auth } from 'firebase/auth'
+import { getFirestore, type Firestore } from 'firebase/firestore'
+import { getStorage, type FirebaseStorage } from 'firebase/storage'
 
 // Firebase web yapılandırması gizli değildir (tarayıcıya zaten gönderilir).
 // Güvenlik Firebase Security Rules ve Authorized domains ile sağlanır.
@@ -20,11 +22,15 @@ export const firebaseConfigured =
 
 let app: FirebaseApp | null = null
 let auth: Auth | null = null
+let db: Firestore | null = null
+let storage: FirebaseStorage | null = null
 
 if (firebaseConfigured) {
   app = initializeApp(config)
   auth = getAuth(app)
+  db = getFirestore(app)
+  storage = getStorage(app)
 }
 
-export { app, auth }
+export { app, auth, db, storage }
 export const googleProvider = new GoogleAuthProvider()
