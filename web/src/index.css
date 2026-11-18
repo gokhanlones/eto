@@ -261,27 +261,8 @@ button { font: inherit; cursor: pointer; }
   font-size: 1.05rem;
 }
 .sheet-item:hover { background: var(--bg); }
-.sheet-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-.sheet-header .sheet-title { margin: 0; color: var(--text); font-size: 1.1rem; }
-.sheet-back {
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--muted);
-  border-radius: 999px;
-  padding: 6px 14px;
-  font-size: 0.9rem;
-}
 .sheet-empty { padding: 8px 12px 16px; margin: 0; }
 
-.breadcrumb {
-  display: inline-block;
-  margin-bottom: 6px;
-  color: var(--muted);
-  text-decoration: none;
-  font-size: 0.9rem;
-}
+.page-path { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 10px; }
+.page-path-parent { color: var(--muted); font-weight: 600; }
+.page-path-sep { color: var(--muted); font-weight: 400; }

@@ -12,8 +12,13 @@ export default function SubSection() {
 
   return (
     <div className="page">
-      <div className="breadcrumb">{t(section.label)}</div>
-      <h2>{sub.name}</h2>
+      <h2 className="page-path">
+        <span className="page-path-parent">{t(section.label)}</span>
+        <span className="page-path-sep" aria-hidden>
+          &gt;
+        </span>
+        <span>{sub.name}</span>
+      </h2>
       <p className="muted">{t('emptySection')}</p>
     </div>
   )

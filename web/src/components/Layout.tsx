@@ -155,12 +155,7 @@ export default function Layout() {
         aria-label={subSection ? t(subSection.label) : undefined}
       >
         <div className="sheet-handle" />
-        <div className="sheet-header">
-          <button className="sheet-back" onClick={() => switchTo('main')}>
-            {t('back')}
-          </button>
-          <h3 className="sheet-title">{subSection && t(subSection.label)}</h3>
-        </div>
+        <h3 className="sheet-title">{subSection && t(subSection.label)}</h3>
         {subSection && subSection.subsections.length === 0 ? (
           <p className="muted sheet-empty">{t('emptySubsections')}</p>
         ) : (
