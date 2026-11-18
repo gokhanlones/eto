@@ -1,8 +1,13 @@
-import { useEffect, useState } from 'react'
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { useAuth } from '../auth'
 import { useLang, useT } from '../i18n'
-import { SECTIONS } from '../sections'
+import { findSection, SECTIONS } from '../sections'
+
+/** Panelin kapanma / açılma animasyon süresi (index.css .sheet transition ile aynı) */
+const SHEET_MS = 300
+
+type Sheet = 'none' | 'main' | 'sub'
 
 /** Her sayfada: üstte banner (solda hamburger, ortada ETO), altta bottom bar (ortada Home, sağda bölümler). */
 export default function Layout() {
@@ -11,14 +16,52 @@ export default function Layout() {
   const navigate = useNavigate()
   const { user, signOut } = useAuth()
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [sheetOpen, setSheetOpen] = useState(false)
+  /** Hangi alt panel açık: ana başlıklar mı, seçilen başlığın alt başlıkları mı */
+  const [sheet, setSheet] = useState<Sheet>('none')
+  /** Paneller arası geçişte (biri inip diğeri yükselirken) arka plan karartması kalsın */
+  const [switching, setSwitching] = useState(false)
+  const [subSectionId, setSubSectionId] = useState<string | null>(null)
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const sheetOpen = sheet !== 'none'
+  const subSection = findSection(subSectionId ?? undefined)
+
+  function closeSheets() {
+    clearTimeout(timer.current)
+    setSwitching(false)
+    setSheet('none')
+  }
+
+  /** Açık paneli aşağı indir, ardından diğerini alttan yükselt */
+  function switchTo(next: Sheet) {
+    clearTimeout(timer.current)
+    setSheet('none')
+    setSwitching(true)
+    timer.current = setTimeout(() => {
+      setSwitching(false)
+      setSheet(next)
+    }, SHEET_MS)
+  }
+
+  function openSection(id: string) {
+    setSubSectionId(id)
+    switchTo('sub')
+  }
+
+  function openSubSection(sectionId: string, subId: string) {
+    closeSheets()
+    navigate(`/section/${sectionId}/${subId}`)
+  }
+
+  useEffect(() => () => clearTimeout(timer.current), [])
 
   // ESC ile kapat
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setDrawerOpen(false)
-        setSheetOpen(false)
+        clearTimeout(timer.current)
+        setSwitching(false)
+        setSheet('none')
       }
     }
     window.addEventListener('keydown', onKey)
@@ -42,7 +85,7 @@ export default function Layout() {
       <nav className="bottombar">
         <span className="icon-btn-spacer" />
         <button className="home-btn" aria-label={t('home')} onClick={() => {
-            setSheetOpen(false)
+            closeSheets()
             navigate('/')
           }}>
           <HomeIcon />
@@ -51,7 +94,7 @@ export default function Layout() {
           className={`icon-btn ${sheetOpen ? 'active' : ''}`}
           aria-label={t('sections')}
           aria-expanded={sheetOpen}
-          onClick={() => setSheetOpen((o) => !o)}
+          onClick={() => (sheetOpen || switching ? closeSheets() : setSheet('main'))}
         >
           <ListIcon />
         </button>
@@ -87,20 +130,50 @@ export default function Layout() {
         </button>
       </aside>
 
-      {/* Alttan yükselen bölümler paneli */}
-      <div className={`backdrop ${sheetOpen ? 'show' : ''}`} onClick={() => setSheetOpen(false)} />
-      <section className={`sheet ${sheetOpen ? 'open' : ''}`} aria-hidden={!sheetOpen} aria-label={t('sections')}>
+      {/* Alttan yükselen paneller */}
+      <div className={`backdrop ${sheetOpen || switching ? 'show' : ''}`} onClick={closeSheets} />
+
+      {/* 1. panel: ana başlıklar */}
+      <section className={`sheet ${sheet === 'main' ? 'open' : ''}`} aria-hidden={sheet !== 'main'} aria-label={t('sections')}>
         <div className="sheet-handle" />
         <h3 className="sheet-title">{t('sections')}</h3>
         <ul className="sheet-list">
           {SECTIONS.map((s) => (
             <li key={s.id}>
-              <NavLink to={`/section/${s.id}`} className="sheet-item" onClick={() => setSheetOpen(false)}>
+              <button className="sheet-item" onClick={() => openSection(s.id)}>
                 {t(s.label)}
-              </NavLink>
+              </button>
             </li>
           ))}
         </ul>
+      </section>
+
+      {/* 2. panel: seçilen ana başlığın alt başlıkları */}
+      <section
+        className={`sheet ${sheet === 'sub' ? 'open' : ''}`}
+        aria-hidden={sheet !== 'sub'}
+        aria-label={subSection ? t(subSection.label) : undefined}
+      >
+        <div className="sheet-handle" />
+        <div className="sheet-header">
+          <button className="sheet-back" onClick={() => switchTo('main')}>
+            {t('back')}
+          </button>
+          <h3 className="sheet-title">{subSection && t(subSection.label)}</h3>
+        </div>
+        {subSection && subSection.subsections.length === 0 ? (
+          <p className="muted sheet-empty">{t('emptySubsections')}</p>
+        ) : (
+          <ul className="sheet-list">
+            {subSection?.subsections.map((sub) => (
+              <li key={sub.id}>
+                <button className="sheet-item" onClick={() => openSubSection(subSection.id, sub.id)}>
+                  {sub.name}
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
     </div>
   )

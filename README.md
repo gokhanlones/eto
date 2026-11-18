@@ -14,7 +14,8 @@ React + TypeScript + Vite + Firebase Authentication.
 4. **Giriş sonrası:** Ana sayfa açılır. Her sayfada şunlar vardır:
    - Üstte banner: solda hamburger menü, ortada ETO yazısı
    - Altta bottom bar: ortada Home, sağda Bölümler butonu
-   - Bölümler butonu alttan yükselen bir panel açar: Bridge, Deck, Accommodation, Engine Room
+   - Başlıklar butonu alttan yükselen bir panel açar: Bridge, Deck, Accommodation, Engine Room
+   - Bir ana başlığa basınca panel aşağı iner ve yerine o başlığın alt başlıklarını gösteren panel yükselir
 
 ### Çalıştırma
 ```bash
@@ -40,5 +41,5 @@ web/src/
   auth.tsx           Google girişi (AuthContext)
   sections.ts        ana başlıklar ve alt başlıklar
   components/Layout.tsx   banner, bottom bar, hamburger menü, alt panel
-  screens/           Splash, Offline, Login, Home, Section, SubSection
+  screens/           Splash, Offline, Login, Home, SubSection
 ```
