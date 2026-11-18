@@ -38,7 +38,7 @@ web/src/
   i18n.tsx           sistem dili tespiti + TR/EN metinler
   firebase.ts        Firebase başlatma
   auth.tsx           Google girişi (AuthContext)
-  sections.ts        forum bölümleri listesi
+  sections.ts        ana başlıklar ve alt başlıklar
   components/Layout.tsx   banner, bottom bar, hamburger menü, alt panel
-  screens/           Splash, Offline, Login, Home, Section
+  screens/           Splash, Offline, Login, Home, Section, SubSection
 ```

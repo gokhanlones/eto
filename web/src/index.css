@@ -76,7 +76,6 @@ button { font: inherit; cursor: pointer; }
 }
 .logo-small { font-size: 1.2rem; padding: 8px 14px; }
 .logo-large { font-size: 2.6rem; padding: 18px 28px; margin-bottom: 12px; }
-.offline-icon { font-size: 3rem; }
 
 .btn {
   border: none;
@@ -257,4 +256,31 @@ button { font: inherit; cursor: pointer; }
 }
 .sheet-item:hover { background: var(--bg); }
 .sheet-item.active { background: var(--bg); color: var(--navy-2); }
-.sheet-icon { font-size: 1.4rem; width: 32px; text-align: center; }
+
+/* ---------- Alt başlık listesi ---------- */
+.list {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.list li + li { border-top: 1px solid var(--border); }
+.list-item {
+  display: block;
+  padding: 16px;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+}
+.list-item:hover, .list-item:active { background: var(--bg); }
+.breadcrumb {
+  display: inline-block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.breadcrumb::before { content: '‹ '; }

@@ -96,9 +96,6 @@ export default function Layout() {
           {SECTIONS.map((s) => (
             <li key={s.id}>
               <NavLink to={`/section/${s.id}`} className="sheet-item" onClick={() => setSheetOpen(false)}>
-                <span className="sheet-icon" aria-hidden>
-                  {s.icon}
-                </span>
                 {t(s.label)}
               </NavLink>
             </li>

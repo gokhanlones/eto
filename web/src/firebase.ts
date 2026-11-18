@@ -14,8 +14,9 @@ const config = {
   appId: env.VITE_FIREBASE_APP_ID || '1:1071181835123:web:686186b501bed0fcf47306',
 }
 
-/** Firebase yapılandırması mevcut mu? */
-export const firebaseConfigured = Boolean(config.apiKey && config.authDomain && config.projectId)
+/** Firebase yapılandırması mevcut mu? (VITE_DEMO_MODE=1 ile kapatılıp demo girişi açılabilir) */
+export const firebaseConfigured =
+  env.VITE_DEMO_MODE !== '1' && Boolean(config.apiKey && config.authDomain && config.projectId)
 
 let app: FirebaseApp | null = null
 let auth: Auth | null = null

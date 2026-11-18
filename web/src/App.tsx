@@ -9,6 +9,7 @@ import Offline from './screens/Offline'
 import Login from './screens/Login'
 import Home from './screens/Home'
 import Section from './screens/Section'
+import SubSection from './screens/SubSection'
 
 /** Splash ekranının en az görünme süresi (ms) */
 const MIN_SPLASH_MS = 1200
@@ -60,6 +61,7 @@ function AuthGate() {
         <Route element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="section/:id" element={<Section />} />
+          <Route path="section/:id/:subId" element={<SubSection />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
