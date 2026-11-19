@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Eğim Noktası</title>
+<style>
+  :root { --bg:#eef1f6; --fg:#1b2233; --muted:#6b7489; --dot:#2f6bff; --ring:#c9d1e0; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#10141d; --fg:#e7ebf3; --muted:#8b94a8; --dot:#5b8cff; --ring:#2a3245; color-scheme:dark; } }
+  html,body { height:100%; margin:0; overflow:hidden; background:var(--bg); color:var(--fg);
+    font:15px/1.4 system-ui,-apple-system,sans-serif; touch-action:none; user-select:none; }
+  #dot { position:fixed; left:0; top:0; width:44px; height:44px; margin:-22px 0 0 -22px; border-radius:50%;
+    background:var(--dot); box-shadow:0 6px 18px rgba(0,0,0,.25); will-change:transform; }
+  #center { position:fixed; left:50%; top:50%; width:60px; height:60px; margin:-30px; border:2px dashed var(--ring); border-radius:50%; }
+  #hud { position:fixed; left:0; right:0; bottom:0; padding:16px; padding-bottom:max(16px,env(safe-area-inset-bottom));
+    text-align:center; color:var(--muted); font-variant-numeric:tabular-nums; }
+  #start { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; background:var(--bg); }
+  #start button { font:600 17px system-ui; padding:14px 26px; border:0; border-radius:12px; background:var(--dot); color:#fff; }
+</style>
+</head>
+<body>
+<div id="center"></div>
+<div id="dot"></div>
+<div id="hud">Telefonu eğ — nokta kayacak</div>
+<div id="start"><button id="go">Başlat</button></div>
+<script>
+const dot = document.getElementById('dot'), hud = document.getElementById('hud');
+let W = innerWidth, H = innerHeight;
+let x = W/2, y = H/2, vx = 0, vy = 0;   // konum ve hız
+let ax = 0, ay = 0;                     // eğimden gelen ivme
+let gotSensor = false;
+addEventListener('resize', () => { W = innerWidth; H = innerHeight; });
+
+function onTilt(e) {
+  if (e.gamma == null) return;
+  gotSensor = true;
+  // gamma: sağa/sola eğim (-90..90), beta: öne/arkaya eğim (-180..180)
+  let g = e.gamma, b = e.beta;
+  const ang = (screen.orientation && screen.orientation.angle) || window.orientation || 0;
+  if (ang === 90)       [g, b] = [b, -g];
+  else if (ang === -90 || ang === 270) [g, b] = [-b, g];
+  else if (ang === 180) [g, b] = [-g, -b];
+  ax = Math.max(-45, Math.min(45, g)) * 0.06;
+  ay = Math.max(-45, Math.min(45, b)) * 0.06;
+  hud.textContent = `sağ/sol: ${g.toFixed(0)}°   ileri/geri: ${b.toFixed(0)}°`;
+}
+
+async function start() {
+  // iOS 13+ izin ister
+  if (typeof DeviceOrientationEvent !== 'undefined' && DeviceOrientationEvent.requestPermission) {
+    try { if (await DeviceOrientationEvent.requestPermission() !== 'granted') hud.textContent = 'Sensör izni verilmedi'; }
+    catch (err) { hud.textContent = 'Sensör izni alınamadı (HTTPS gerekli)'; }
+  }
+  addEventListener('deviceorientation', onTilt);
+  document.getElementById('start').hidden = true;
+  setTimeout(() => { if (!gotSensor) hud.textContent = 'Sensör yok — noktayı parmakla/fareyle sürükleyebilirsin'; }, 1500);
+  requestAnimationFrame(loop);
+}
+document.getElementById('go').addEventListener('click', start);
+
+// Sensör yoksa sürükleyerek dene
+let drag = false;
+addEventListener('pointerdown', e => { drag = true; });
+addEventListener('pointerup',   () => drag = false);
+addEventListener('pointermove', e => { if (drag && !gotSensor) { x = e.clientX; y = e.clientY; vx = vy = 0; } });
+
+function loop() {
+  vx = (vx + ax) * 0.98;  vy = (vy + ay) * 0.98;   // ivme + sürtünme
+  x += vx; y += vy;
+  const r = 22;
+  if (x < r)     { x = r;     vx = -vx * 0.5; }      // kenardan sekme
+  if (x > W - r) { x = W - r; vx = -vx * 0.5; }
+  if (y < r)     { y = r;     vy = -vy * 0.5; }
+  if (y > H - r) { y = H - r; vy = -vy * 0.5; }
+  dot.style.transform = `translate(${x}px, ${y}px)`;
+  requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>
